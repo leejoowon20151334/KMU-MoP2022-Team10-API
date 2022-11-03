@@ -1,6 +1,7 @@
 package com.MoP2022.Team10.mapping;
 
 import com.MoP2022.Team10.db.service.DBTestService;
+import com.MoP2022.Team10.db.service.FavoriteService;
 import com.MoP2022.Team10.db.service.IngredientService;
 import com.MoP2022.Team10.db.service.UserDataService;
 import com.MoP2022.Team10.mapping.res.ResDefault;
@@ -101,6 +102,34 @@ public class Map extends OncePerRequestFilter {
         IngredientService ingredientService = new IngredientService();
         System.out.println(userId + " " + ingredientId+" "+count+" "+expire);
         if(ingredientService.addUserIngredient(userId,ingredientId,count, LocalDate.parse(expire,dateTimeFormatter)))
+            res.data = "success";
+        else
+            res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/addFavorite")
+    public ResponseEntity<ResDefault> addFavorite(
+            @RequestParam(value = "userId")int userId,
+            @RequestParam(value = "recipeId")int recipeId
+    ) {
+        ResDefault res = new ResDefault();
+        FavoriteService favoriteService = new FavoriteService();
+        if(favoriteService.addFavorite(userId,recipeId))
+            res.data = "success";
+        else
+            res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/deleteFavorite")
+    public ResponseEntity<ResDefault> deleteFavorite(
+            @RequestParam(value = "userId")int userId,
+            @RequestParam(value = "recipeId")int recipeId
+    ) {
+        ResDefault res = new ResDefault();
+        FavoriteService favoriteService = new FavoriteService();
+        if(favoriteService.deleteFavorite(userId,recipeId))
             res.data = "success";
         else
             res.data = "fail";
