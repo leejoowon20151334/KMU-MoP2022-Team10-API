@@ -12,7 +12,7 @@ spring:
     exclude: org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration
 db:
   driver: com.mysql.cj.jdbc.Driver
-  url: "jdbc:mysql://localhost:3306/testdb?CharacterEncoding=UTF-8"
+  url: "jdbc:mysql://localhost:3306/MoP2022Team10?CharacterEncoding=UTF-8"
   username: testUser
   password: test123
 

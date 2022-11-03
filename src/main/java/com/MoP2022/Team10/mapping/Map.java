@@ -1,6 +1,7 @@
 package com.MoP2022.Team10.mapping;
 
 import com.MoP2022.Team10.db.service.DBTestService;
+import com.MoP2022.Team10.db.service.UserDataService;
 import com.MoP2022.Team10.mapping.res.ResDefault;
 import com.MoP2022.Team10.process.TestProcess;
 import org.springframework.http.ResponseEntity;
@@ -56,4 +57,12 @@ public class Map extends OncePerRequestFilter {
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
+    @GetMapping("/signUp")
+    public ResponseEntity<ResDefault> signUp(@RequestParam(value = "name")String name) throws SQLException {
+        ResDefault res = new ResDefault();
+        UserDataService userDataService = new UserDataService();
+        userDataService.signUp(name);
+        res.data = "success";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
 }
