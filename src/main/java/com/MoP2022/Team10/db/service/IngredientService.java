@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class IngredientService {
 
     public ArrayList<IngredientModel> getIngredientByName(String name){
-        String q = "select a.* from Ingredients a where a.name like '%?%'";
+        String q = "select a.* from Ingredients a where a.name like concat('%', ? ,'%')";
         ArrayList<String> val = new ArrayList<>();
         val.add(name);
         ArrayList<IngredientModel> result = new ArrayList<>();
@@ -84,5 +84,30 @@ public class IngredientService {
         val.add(Integer.toString(count));
         val.add(Integer.toString(id));
         DBExec.update(q,val);
+    }
+
+    public ArrayList<IngredientModel> getUserIngredients(int userId){
+        String q = "select a.ingredientId,a.count,a.expirationDate,b.name,b.expiration,b.unit " +
+                "from UserIngredients a left join Ingredients b on a.ingredientId=b.id " +
+                "where a.userId = ? order by a.id asc";
+        ArrayList<String> val = new ArrayList<>();
+        val.add(Integer.toString(userId));
+        ArrayList<IngredientModel> result = new ArrayList<>();
+        try {
+            ResultSet rs = DBExec.select(q,val);
+            while (rs.next()){
+                IngredientModel model = new IngredientModel();
+                model.id=rs.getInt("ingredientId");
+                model.name=rs.getString("name");
+                model.defaultExpiration=rs.getInt("expiration");
+                model.unit=rs.getString("unit");
+                model.count=rs.getInt("count");
+                model.expirationDate=rs.getDate("expirationDate").toLocalDate();
+                result.add(model);
+            }
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return result;
     }
 }

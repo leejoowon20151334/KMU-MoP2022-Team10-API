@@ -1,6 +1,7 @@
 package com.MoP2022.Team10.mapping;
 
 import com.MoP2022.Team10.db.service.DBTestService;
+import com.MoP2022.Team10.db.service.IngredientService;
 import com.MoP2022.Team10.db.service.UserDataService;
 import com.MoP2022.Team10.mapping.res.ResDefault;
 import com.MoP2022.Team10.process.TestProcess;
@@ -50,7 +51,7 @@ public class Map extends OncePerRequestFilter {
     }
 
     @GetMapping("/processDBTest")
-    public ResponseEntity<ResDefault> processDBTest() throws SQLException {
+    public ResponseEntity<ResDefault> processDBTest() {
         ResDefault res = new ResDefault();
         TestProcess process = new TestProcess();
         res.data = process.dbTest();
@@ -58,11 +59,28 @@ public class Map extends OncePerRequestFilter {
     }
 
     @GetMapping("/signUp")
-    public ResponseEntity<ResDefault> signUp(@RequestParam(value = "name")String name) throws SQLException {
+    public ResponseEntity<ResDefault> signUp(@RequestParam(value = "name")String name) {
         ResDefault res = new ResDefault();
         UserDataService userDataService = new UserDataService();
         userDataService.signUp(name);
         res.data = "success";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+
+    @GetMapping("/getIngredient")
+    public ResponseEntity<ResDefault> getIngredient(@RequestParam(value = "name")String name) {
+        ResDefault res = new ResDefault();
+        IngredientService ingredientService = new IngredientService();
+        res.data = ingredientService.getIngredientByName(name.replace(" ",""));
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/userIngredient")
+    public ResponseEntity<ResDefault> userIngredient(@RequestParam(value = "userId")int userId) {
+        ResDefault res = new ResDefault();
+        IngredientService ingredientService = new IngredientService();
+        res.data = ingredientService.getUserIngredients(userId);
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 }

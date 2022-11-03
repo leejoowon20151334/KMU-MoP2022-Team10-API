@@ -19,7 +19,7 @@ public class TestProcess {
         return testMap;
     }
 
-    public List<HashMap<String, String>> dbTest() throws SQLException {
+    public List<HashMap<String, String>> dbTest() {
         DBTestService db = new DBTestService();
         List<DBTestModel> data = db.fetchData();
 

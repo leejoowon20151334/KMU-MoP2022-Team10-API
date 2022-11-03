@@ -13,20 +13,23 @@ import java.util.List;
 
 public class DBTestService {
 
-    public ArrayList<DBTestModel> fetchData() throws SQLException {
+    public ArrayList<DBTestModel> fetchData() {
         String q = "select a,b from test limit 10";
 
         ArrayList<DBTestModel> result = new ArrayList<>();
         ArrayList<String> val = new ArrayList<>();
         DBTestModel model;
         ResultSet rs = DBExec.select(q,val);
-        while (rs.next()) {
-            model = new DBTestModel();
-            model.setA(rs.getString("a"));
-            model.setB(rs.getString("b"));
-            result.add(model);
+        try {
+            while (rs.next()) {
+                model = new DBTestModel();
+                model.setA(rs.getString("a"));
+                model.setB(rs.getString("b"));
+                result.add(model);
+            }
+        }catch (Exception e){
+            System.out.println(e.toString());
         }
-
         return result;
     }
 

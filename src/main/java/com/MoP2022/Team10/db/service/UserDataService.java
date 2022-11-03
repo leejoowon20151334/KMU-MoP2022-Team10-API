@@ -1,6 +1,7 @@
 package com.MoP2022.Team10.db.service;
 
 import com.MoP2022.Team10.db.DBExec;
+import com.MoP2022.Team10.db.model.IngredientModel;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -28,6 +29,4 @@ public class UserDataService {
 
         return result;
     }
-
-
 }
