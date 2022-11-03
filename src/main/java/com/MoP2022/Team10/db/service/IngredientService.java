@@ -60,12 +60,10 @@ public class IngredientService {
         return id;
     }
 
-    public void addIngredient(int userId, int ingredientId, int count, LocalDate expire){
+    public boolean addUserIngredient(int userId, int ingredientId, int count, LocalDate expire){
         int id = userIngredientExists(userId,ingredientId,expire);
-        if(id!=0){
-            plusIngredient(id,count);
-            return;
-        }
+        if(id!=0)
+            return plusIngredient(id,count);
 
         String q = "insert into UserIngredients " +
                 "(`userId`,`ingredientId`,`count`,`expirationDate`) " +
@@ -75,15 +73,15 @@ public class IngredientService {
         val.add(Integer.toString(ingredientId));
         val.add(Integer.toString(count));
         val.add(expire.toString());
-        DBExec.update(q,val);
+        return DBExec.update(q,val);
     }
 
-    public void plusIngredient(int id,int count){
+    public boolean plusIngredient(int id,int count){
         String q = "update UserIngredients set `count`=(`count` + ?) where id = ?";
         ArrayList<String> val = new ArrayList<>();
         val.add(Integer.toString(count));
         val.add(Integer.toString(id));
-        DBExec.update(q,val);
+        return DBExec.update(q,val);
     }
 
     public ArrayList<IngredientModel> getUserIngredients(int userId){

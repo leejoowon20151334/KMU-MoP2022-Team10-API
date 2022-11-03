@@ -15,10 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping
 public class Map extends OncePerRequestFilter {
+
+    public final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     // set HTTP Headers
     @Override
@@ -62,8 +66,10 @@ public class Map extends OncePerRequestFilter {
     public ResponseEntity<ResDefault> signUp(@RequestParam(value = "name")String name) {
         ResDefault res = new ResDefault();
         UserDataService userDataService = new UserDataService();
-        userDataService.signUp(name);
-        res.data = "success";
+        if(userDataService.signUp(name))
+            res.data = "success";
+        else
+            res.data = "fail";
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
@@ -81,6 +87,23 @@ public class Map extends OncePerRequestFilter {
         ResDefault res = new ResDefault();
         IngredientService ingredientService = new IngredientService();
         res.data = ingredientService.getUserIngredients(userId);
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/addUserIngredient")
+    public ResponseEntity<ResDefault> addUserIngredient(
+            @RequestParam(value = "userId")int userId,
+            @RequestParam(value = "ingredientId")int ingredientId,
+            @RequestParam(value = "count")int count,
+            @RequestParam(value = "expire")String expire
+    ) {
+        ResDefault res = new ResDefault();
+        IngredientService ingredientService = new IngredientService();
+        System.out.println(userId + " " + ingredientId+" "+count+" "+expire);
+        if(ingredientService.addUserIngredient(userId,ingredientId,count, LocalDate.parse(expire,dateTimeFormatter)))
+            res.data = "success";
+        else
+            res.data = "fail";
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 }

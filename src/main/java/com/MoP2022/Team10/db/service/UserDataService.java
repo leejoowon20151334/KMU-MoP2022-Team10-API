@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public class UserDataService {
 
-    public void signUp(String userName){
+    public boolean signUp(String userName){
         String q = "insert into Users (`name`) values( ? )";
         ArrayList<String> val = new ArrayList<>();
         val.add(userName);
-        DBExec.update(q,val);
+        return DBExec.update(q,val);
     }
 
     public int getUserIdByName(String userName){
