@@ -1,9 +1,6 @@
 package com.MoP2022.Team10.mapping;
 
-import com.MoP2022.Team10.db.service.DBTestService;
-import com.MoP2022.Team10.db.service.FavoriteService;
-import com.MoP2022.Team10.db.service.IngredientService;
-import com.MoP2022.Team10.db.service.UserDataService;
+import com.MoP2022.Team10.db.service.*;
 import com.MoP2022.Team10.mapping.res.ResDefault;
 import com.MoP2022.Team10.process.TestProcess;
 import org.springframework.http.ResponseEntity;
@@ -130,6 +127,31 @@ public class Map extends OncePerRequestFilter {
         ResDefault res = new ResDefault();
         FavoriteService favoriteService = new FavoriteService();
         if(favoriteService.deleteFavorite(userId,recipeId))
+            res.data = "success";
+        else
+            res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/startPush")
+    public ResponseEntity<ResDefault> startPush(
+            @RequestParam(value = "userId")int userId,
+            @RequestParam(value = "pushId")String pushId
+    ) {
+        ResDefault res = new ResDefault();
+        PushStatusService pushStatusService = new PushStatusService();
+        if(pushStatusService.startPush(userId,pushId))
+            res.data = "success";
+        else
+            res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/stopPush")
+    public ResponseEntity<ResDefault> stopPush(@RequestParam(value = "userId")int userId) {
+        ResDefault res = new ResDefault();
+        PushStatusService pushStatusService = new PushStatusService();
+        if(pushStatusService.stopPush(userId))
             res.data = "success";
         else
             res.data = "fail";
