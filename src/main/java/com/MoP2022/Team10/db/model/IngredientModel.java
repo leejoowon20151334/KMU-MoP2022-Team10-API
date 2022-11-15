@@ -9,6 +9,7 @@ public class IngredientModel {
     public String name;
     public int defaultExpiration;
     public String unit;
+    public String img;
 
     //사용자별 정보
     public int count;

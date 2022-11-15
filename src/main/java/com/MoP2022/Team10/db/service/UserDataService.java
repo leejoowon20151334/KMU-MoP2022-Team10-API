@@ -17,12 +17,14 @@ public class UserDataService {
 
     public int getUserIdByName(String userName){
         int result = 0;
-        String q = "select id from Users where name = ? limit 1";
+        String q = "select id from Users where `name` = ? limit 1";
+        System.out.println(userName);
         ArrayList<String> val = new ArrayList<>();
         val.add(userName);
         try{
             ResultSet rs = DBExec.select(q,val);
-            result = rs.getInt("id");
+            if(rs.next())
+                result = rs.getInt("id");
         }catch (Exception e){
             System.out.println(e.toString());
         }

@@ -157,4 +157,20 @@ public class Map extends OncePerRequestFilter {
             res.data = "fail";
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
+
+    @GetMapping("/getRecipe")
+    public ResponseEntity<ResDefault> getRecipe(@RequestParam(value = "name")String name) {
+        ResDefault res = new ResDefault();
+        RecipeService recipeService = new RecipeService();
+        res.data = recipeService.getRecipeByName(name);
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/getRecipeDetail")
+    public ResponseEntity<ResDefault> getRecipe(@RequestParam(value = "recipeId")int recipeId) {
+        ResDefault res = new ResDefault();
+        RecipeService recipeService = new RecipeService();
+        res.data = recipeService.getRecipe(recipeId);
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
 }

@@ -27,6 +27,34 @@ public class IngredientService {
                 model.name=rs.getString("name");
                 model.defaultExpiration=rs.getInt("expiration");
                 model.unit=rs.getString("unit");
+                model.img = rs.getString("img");
+                result.add(model);
+            }
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+
+        return result;
+    }
+
+    public ArrayList<IngredientModel> getRecipeIngredient(int recipeId){
+        String q = "select a.count,b.* from RecipeIngredientMatch a inner join Ingredients b on a.ingredientId=b.id " +
+                " where a.recipeId = ? order by b.id asc";
+        ArrayList<String> val = new ArrayList<>();
+        val.add(Integer.toString(recipeId));
+        ArrayList<IngredientModel> result = new ArrayList<>();
+
+        try {
+            ResultSet rs = DBExec.select(q,val);
+            IngredientModel model;
+            while (rs.next()) {
+                model = new IngredientModel();
+                model.id=rs.getInt("id");
+                model.name=rs.getString("name");
+                model.defaultExpiration=rs.getInt("expiration");
+                model.unit=rs.getString("unit");
+                model.count = rs.getInt("count");
+                model.img = rs.getString("img");
                 result.add(model);
             }
         }catch (Exception e){
@@ -85,7 +113,7 @@ public class IngredientService {
     }
 
     public ArrayList<IngredientModel> getUserIngredients(int userId){
-        String q = "select a.ingredientId,a.count,a.expirationDate,b.name,b.expiration,b.unit " +
+        String q = "select a.ingredientId,a.count,a.expirationDate,b.name,b.expiration,b.unit,b.img " +
                 "from UserIngredients a left join Ingredients b on a.ingredientId=b.id " +
                 "where a.userId = ? order by a.id asc";
         ArrayList<String> val = new ArrayList<>();
@@ -101,6 +129,7 @@ public class IngredientService {
                 model.unit=rs.getString("unit");
                 model.count=rs.getInt("count");
                 model.expirationDate=rs.getDate("expirationDate").toLocalDate();
+                model.img = rs.getString("img");
                 result.add(model);
             }
         }catch (Exception e){
