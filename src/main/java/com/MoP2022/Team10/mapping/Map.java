@@ -133,6 +133,14 @@ public class Map extends OncePerRequestFilter {
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
+    @GetMapping("/getFavorite")
+    public ResponseEntity<ResDefault> getFavorite(@RequestParam(value = "userId")int userId) {
+        ResDefault res = new ResDefault();
+        RecipeService recipeService = new RecipeService();
+        res.data = recipeService.getUserRecipe(userId);
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
     @GetMapping("/startPush")
     public ResponseEntity<ResDefault> startPush(
             @RequestParam(value = "userId")int userId,

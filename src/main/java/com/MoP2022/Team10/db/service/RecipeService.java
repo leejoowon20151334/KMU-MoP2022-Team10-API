@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RecipeService {
 
@@ -19,7 +20,7 @@ public class RecipeService {
         ArrayList<RecipeModel> result = new ArrayList<>();
 
         try {
-            ResultSet rs = DBExec.select(q,val);
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
             result = parseDBRecipe(rs);
         }catch (Exception e){
             System.out.println(e.toString());
@@ -34,13 +35,33 @@ public class RecipeService {
         ArrayList<RecipeModel> result = new ArrayList<>();
 
         try {
-            ResultSet rs = DBExec.select(q,val);
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
             result = parseDBRecipe(rs);
         }catch (Exception e){
             System.out.println(e.toString());
         }
         return result;
     }
+
+    public ArrayList<RecipeModel> getUserRecipe(int userId){
+        String q = "select a.* from Recipes a inner join UserFavorites b on a.id=b.recipeId where b.userId = ? ";
+        ArrayList<String> val = new ArrayList<>();
+        val.add(Integer.toString(userId));
+        ArrayList<RecipeModel> result = new ArrayList<>();
+
+        try {
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
+            result = parseDBRecipe(rs);
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return result;
+    }
+
+    /*public boolean useRecipe(int userId, int recipeId){
+        ArrayList<RecipeModel> recipeList = getRecipe(recipeId);
+
+    }*/
 
     public ArrayList<RecipeTypeModel> getRecipeType(int recipeid){
         String q = "select b.* from RecipeCategoryMatch a inner join RecipeCategory b on a.categoryId=b.id " +
@@ -50,12 +71,12 @@ public class RecipeService {
         ArrayList<RecipeTypeModel> result = new ArrayList<>();
 
         try {
-            ResultSet rs = DBExec.select(q,val);
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
             RecipeTypeModel model;
-            while (rs.next()) {
+            for(HashMap<String,String> item : rs){
                 model = new RecipeTypeModel();
-                model.typeId=rs.getInt("id");
-                model.typeName = rs.getString("name");
+                model.typeId= Integer.parseInt(item.get("id"));
+                model.typeName = item.get("name");
                 result.add(model);
             }
         }catch (Exception e){
@@ -71,9 +92,9 @@ public class RecipeService {
         ArrayList<String> result = new ArrayList<>();
 
         try {
-            ResultSet rs = DBExec.select(q,val);
-            while (rs.next()) {
-                result.add(rs.getString("description"));
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
+            for(HashMap<String,String> item : rs){
+                result.add(item.get("description"));
             }
         }catch (Exception e){
             System.out.println(e.toString());
@@ -81,18 +102,18 @@ public class RecipeService {
         return result;
     }
 
-    private ArrayList<RecipeModel> parseDBRecipe(ResultSet rs) throws SQLException {
+    private ArrayList<RecipeModel> parseDBRecipe(ArrayList<HashMap<String,String>> rs) throws SQLException {
         IngredientService ingredientService = new IngredientService();
         RecipeModel model;
         ArrayList<RecipeModel> result = new ArrayList<>();
-        while (rs.next()) {
+        for(HashMap<String,String> item : rs){
             model = new RecipeModel();
-            model.id=rs.getInt("id");
-            model.name = rs.getString("name");
-            model.time=rs.getInt("time");
-            model.difficulty = rs.getInt("difficulty");
-            model.description = rs.getString("description");
-            model.img = rs.getString("img");
+            model.id= Integer.parseInt(item.get("id"));
+            model.name = item.get("name");
+            model.time= Integer.parseInt(item.get("time"));
+            model.difficulty = Integer.parseInt(item.get("difficulty"));
+            model.description = item.get("description");
+            model.img = item.get("img");
             model.type = getRecipeType(model.id);
             model.ingredients =ingredientService.getRecipeIngredient(model.id);
             model.procedure =getProcedure(model.id);

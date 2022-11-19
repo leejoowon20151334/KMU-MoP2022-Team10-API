@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DBTestService {
@@ -19,12 +20,12 @@ public class DBTestService {
         ArrayList<DBTestModel> result = new ArrayList<>();
         ArrayList<String> val = new ArrayList<>();
         DBTestModel model;
-        ResultSet rs = DBExec.select(q,val);
+        ArrayList<HashMap<String,String>>  rs = DBExec.select(q,val);
         try {
-            while (rs.next()) {
+            for(HashMap<String,String> item : rs) {
                 model = new DBTestModel();
-                model.setA(rs.getString("a"));
-                model.setB(rs.getString("b"));
+                model.setA(item.get("a"));
+                model.setB(item.get("b"));
                 result.add(model);
             }
         }catch (Exception e){

@@ -5,6 +5,7 @@ import com.MoP2022.Team10.db.model.IngredientModel;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserDataService {
 
@@ -22,9 +23,10 @@ public class UserDataService {
         ArrayList<String> val = new ArrayList<>();
         val.add(userName);
         try{
-            ResultSet rs = DBExec.select(q,val);
-            if(rs.next())
-                result = rs.getInt("id");
+            ArrayList<HashMap<String,String>>  rs = DBExec.select(q,val);
+            for(HashMap<String,String> item : rs) {
+                result = Integer.parseInt(item.get("id"));
+            }
         }catch (Exception e){
             System.out.println(e.toString());
         }

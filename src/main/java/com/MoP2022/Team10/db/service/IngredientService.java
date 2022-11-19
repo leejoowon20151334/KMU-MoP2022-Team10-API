@@ -8,7 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class IngredientService {
 
@@ -19,15 +21,15 @@ public class IngredientService {
         ArrayList<IngredientModel> result = new ArrayList<>();
 
         try {
-            ResultSet rs = DBExec.select(q,val);
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
             IngredientModel model;
-            while (rs.next()) {
+            for(HashMap<String,String> item : rs){
                 model = new IngredientModel();
-                model.id=rs.getInt("id");
-                model.name=rs.getString("name");
-                model.defaultExpiration=rs.getInt("expiration");
-                model.unit=rs.getString("unit");
-                model.img = rs.getString("img");
+                model.id= Integer.parseInt(item.get("id"));
+                model.name=item.get("name");
+                model.defaultExpiration= Integer.parseInt(item.get("expiration"));
+                model.unit=item.get("unit");
+                model.img = item.get("img");
                 result.add(model);
             }
         }catch (Exception e){
@@ -45,16 +47,16 @@ public class IngredientService {
         ArrayList<IngredientModel> result = new ArrayList<>();
 
         try {
-            ResultSet rs = DBExec.select(q,val);
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
             IngredientModel model;
-            while (rs.next()) {
+            for(HashMap<String,String> item : rs){
                 model = new IngredientModel();
-                model.id=rs.getInt("id");
-                model.name=rs.getString("name");
-                model.defaultExpiration=rs.getInt("expiration");
-                model.unit=rs.getString("unit");
-                model.count = rs.getInt("count");
-                model.img = rs.getString("img");
+                model.id= Integer.parseInt(item.get("id"));
+                model.name=item.get("name");
+                model.defaultExpiration= Integer.parseInt(item.get("expiration"));
+                model.unit=item.get("unit");
+                model.count = Integer.parseInt(item.get("count"));
+                model.img = item.get("img");
                 result.add(model);
             }
         }catch (Exception e){
@@ -79,9 +81,10 @@ public class IngredientService {
         val.add(Integer.toString(ingredientId));
         val.add(expire.toString());
         try{
-            ResultSet rs = DBExec.select(q,val);
-            if(rs.next())
-                id = rs.getInt("id");
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
+            for(HashMap<String,String> item : rs) {
+                id = Integer.parseInt(item.get("id"));
+            }
         }catch (Exception e){
             System.out.println(e.toString());
         }
@@ -120,16 +123,17 @@ public class IngredientService {
         val.add(Integer.toString(userId));
         ArrayList<IngredientModel> result = new ArrayList<>();
         try {
-            ResultSet rs = DBExec.select(q,val);
-            while (rs.next()){
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
+            for(HashMap<String,String> item : rs) {
                 IngredientModel model = new IngredientModel();
-                model.id=rs.getInt("ingredientId");
-                model.name=rs.getString("name");
-                model.defaultExpiration=rs.getInt("expiration");
-                model.unit=rs.getString("unit");
-                model.count=rs.getInt("count");
-                model.expirationDate=rs.getDate("expirationDate").toLocalDate();
-                model.img = rs.getString("img");
+                model.id= Integer.parseInt(item.get("ingredientId"));
+                model.name=item.get("name");
+                model.defaultExpiration= Integer.parseInt(item.get("expiration"));
+                model.unit=item.get("unit");
+                model.count= Integer.parseInt(item.get("count"));
+                model.expirationDate=LocalDate.parse(item.get("expirationDate"),
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                model.img = item.get("img");
                 result.add(model);
             }
         }catch (Exception e){
