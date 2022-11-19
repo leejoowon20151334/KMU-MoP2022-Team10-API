@@ -7,11 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.imageio.ImageIO;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -175,10 +177,32 @@ public class Map extends OncePerRequestFilter {
     }
 
     @GetMapping("/getRecipeDetail")
-    public ResponseEntity<ResDefault> getRecipe(@RequestParam(value = "recipeId")int recipeId) {
+    public ResponseEntity<ResDefault> getRecipeDetail(@RequestParam(value = "recipeId")int recipeId) {
         ResDefault res = new ResDefault();
         RecipeService recipeService = new RecipeService();
         res.data = recipeService.getRecipe(recipeId);
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @PostMapping(value = "/imageRecognition",produces="application/json; charset=utf-8")
+    public ResponseEntity<ResDefault> imageRecognition(@RequestBody String imgStr) {
+        ResDefault res = new ResDefault();
+
+        try {
+            byte[] img = javax.xml.bind.DatatypeConverter.parseBase64Binary(imgStr);
+
+            //이미지 내용물 확인
+            //BufferedImage final_buffered_image = ImageIO.read(new ByteArrayInputStream(img));
+            //ImageIO.write(final_buffered_image , "png", new File("image.png") );
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+
+        // 이미지 -> 재료목록 변환 소스 작성
+
+
+
+
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 }
