@@ -65,6 +65,8 @@ public class DBExec {
         }
 
         try {
+            if(rs!=null)
+                rs.close();
             if(pst!=null)
                 pst.close();
             if(con!=null)
