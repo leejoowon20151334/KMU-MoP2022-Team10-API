@@ -19,7 +19,7 @@ public class Conn {
         config.setJdbcUrl(DBConfig.url);
         config.setUsername(DBConfig.username);
         config.setPassword(DBConfig.password);
-        config.setMaximumPoolSize(30);
+        config.setMaximumPoolSize(24);
         config.setIdleTimeout(100);
         config.setMaxLifetime(25);
         ds = new HikariDataSource(config);

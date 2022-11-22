@@ -1,5 +1,9 @@
 server:
-  port: 8081
+  tomcat:
+    threads:
+      max: 16
+      min-spare: 10 
+  port: 8000
 spring:
   http:
     encoding:
@@ -15,7 +19,7 @@ spring:
       enabled: true
 db:
   driver: com.mysql.cj.jdbc.Driver
-  url: "jdbc:mysql://localhost:3306/MoP2022Team10?CharacterEncoding=UTF-8"
-  username: testUser
-  password: test123
+  url: "jdbc:mysql://dev.pinkbean.kr:8005/MoP2022Team10?CharacterEncoding=UTF-8"
+  username: user
+  password: user1234
 
