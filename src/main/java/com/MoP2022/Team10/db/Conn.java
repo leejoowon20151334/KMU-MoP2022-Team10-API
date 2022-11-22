@@ -12,17 +12,22 @@ public class Conn {
     private static HikariConfig config = new HikariConfig();
     private static DataSource ds;
 
+    private static Connection conn;
+
     static{
         config.setDriverClassName(DBConfig.driver);
         config.setJdbcUrl(DBConfig.url);
         config.setUsername(DBConfig.username);
         config.setPassword(DBConfig.password);
-        config.setMaximumPoolSize(300);
+        config.setMaximumPoolSize(30);
         config.setIdleTimeout(100);
+        config.setMaxLifetime(25);
         ds = new HikariDataSource(config);
     }
 
     public static Connection getConnection() throws SQLException{
-        return ds.getConnection();
+        if(conn == null || conn.isClosed())
+            conn = ds.getConnection();
+        return conn;
     }
 }
