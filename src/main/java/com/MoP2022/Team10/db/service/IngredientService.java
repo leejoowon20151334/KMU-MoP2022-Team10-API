@@ -55,7 +55,7 @@ public class IngredientService {
                 model.name=item.get("name");
                 model.defaultExpiration= Integer.parseInt(item.get("expiration"));
                 model.unit=item.get("unit");
-                model.count = Integer.parseInt(item.get("count"));
+                model.count = Double.parseDouble(item.get("count"));
                 model.img = item.get("img");
                 result.add(model);
             }
@@ -130,7 +130,7 @@ public class IngredientService {
                 model.name=item.get("name");
                 model.defaultExpiration= Integer.parseInt(item.get("expiration"));
                 model.unit=item.get("unit");
-                model.count= Integer.parseInt(item.get("count"));
+                model.count= Double.parseDouble(item.get("count"));
                 model.expirationDate=LocalDate.parse(item.get("expirationDate"),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 model.img = item.get("img");

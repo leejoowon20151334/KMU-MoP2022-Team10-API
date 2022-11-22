@@ -21,7 +21,7 @@ public class RecipeService {
 
         try {
             ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
-            result = parseDBRecipe(rs);
+            result = parseDBRecipe(rs,false);
         }catch (Exception e){
             System.out.println(e.toString());
         }
@@ -51,7 +51,7 @@ public class RecipeService {
 
         try {
             ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
-            result = parseDBRecipe(rs);
+            result = parseDBRecipe(rs,false);
         }catch (Exception e){
             System.out.println(e.toString());
         }
@@ -103,6 +103,10 @@ public class RecipeService {
     }
 
     private ArrayList<RecipeModel> parseDBRecipe(ArrayList<HashMap<String,String>> rs) throws SQLException {
+        return parseDBRecipe(rs,true);
+    }
+
+    private ArrayList<RecipeModel> parseDBRecipe(ArrayList<HashMap<String,String>> rs,boolean getDetail) throws SQLException {
         IngredientService ingredientService = new IngredientService();
         RecipeModel model;
         ArrayList<RecipeModel> result = new ArrayList<>();
@@ -114,9 +118,12 @@ public class RecipeService {
             model.difficulty = Integer.parseInt(item.get("difficulty"));
             model.description = item.get("description");
             model.img = item.get("img");
-            model.type = getRecipeType(model.id);
-            model.ingredients =ingredientService.getRecipeIngredient(model.id);
-            model.procedure =getProcedure(model.id);
+            if(getDetail) {
+                model.type = getRecipeType(model.id);
+                model.ingredients = ingredientService.getRecipeIngredient(model.id);
+                model.procedure = getProcedure(model.id);
+            }
+
             result.add(model);
         }
         return result;

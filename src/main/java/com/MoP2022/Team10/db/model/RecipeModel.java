@@ -9,7 +9,7 @@ public class RecipeModel {
     public int difficulty;
     public String description;
     public String img;
-    public ArrayList<RecipeTypeModel> type;
-    public ArrayList<IngredientModel> ingredients;
-    public ArrayList<String> procedure;
+    public ArrayList<RecipeTypeModel> type = new ArrayList<>();
+    public ArrayList<IngredientModel> ingredients = new ArrayList<>();
+    public ArrayList<String> procedure = new ArrayList<>();
 }
