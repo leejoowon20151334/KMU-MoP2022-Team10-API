@@ -212,6 +212,14 @@ public class Map extends OncePerRequestFilter {
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
+    @GetMapping("/getMyEvaluation")
+    public ResponseEntity<ResDefault> getMyEvaluation(@RequestParam(value = "userId")int userId) {
+        ResDefault res = new ResDefault();
+        RecipeService recipeService = new RecipeService();
+        res.data = recipeService.getMyEvaluation(userId);
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
     @GetMapping("/addUserEvaluation")
     public ResponseEntity<ResDefault> addUserEvaluation(
             @RequestParam(value = "userId")int userId,
