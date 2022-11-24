@@ -1,13 +1,10 @@
 package com.MoP2022.Team10.db.service;
 
 import com.MoP2022.Team10.db.DBExec;
-import com.MoP2022.Team10.db.model.IngredientModel;
 import com.MoP2022.Team10.db.model.RecipeModel;
 import com.MoP2022.Team10.db.model.RecipeTypeModel;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -62,6 +59,21 @@ public class RecipeService {
         ArrayList<RecipeModel> recipeList = getRecipe(recipeId);
 
     }*/
+
+    public ArrayList<RecipeModel> getUserRecipeLog(int userId){
+        String q = "select distinct b.* from userrecipelog a inner join recipes b on a.recipeId = b.id\n" +
+                "where a.userId= ? ";
+        ArrayList<String> val = new ArrayList<>();
+        val.add(Integer.toString(userId));
+        ArrayList<RecipeModel> result = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
+            result = parseDBRecipe(rs,false);
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return result;
+    }
 
     public ArrayList<RecipeTypeModel> getRecipeType(int recipeid){
         String q = "select b.* from RecipeCategoryMatch a inner join RecipeCategory b on a.categoryId=b.id " +

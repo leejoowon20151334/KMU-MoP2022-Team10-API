@@ -67,9 +67,17 @@ public class Map extends OncePerRequestFilter {
         ResDefault res = new ResDefault();
         UserDataService userDataService = new UserDataService();
         if(userDataService.signUp(name))
-            res.data = "success";
+            res.data = userDataService.getUserIdByName(name);
         else
-            res.data = "fail";
+            res.data = 0;
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/getUserId")
+    public ResponseEntity<ResDefault> getUserId(@RequestParam(value = "name")String name) {
+        ResDefault res = new ResDefault();
+        UserDataService userDataService = new UserDataService();
+        res.data = userDataService.getUserIdByName(name);
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
@@ -165,6 +173,64 @@ public class Map extends OncePerRequestFilter {
             res.data = "success";
         else
             res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/addUserSearchLog")
+    public ResponseEntity<ResDefault> addUserSearchLog(
+            @RequestParam(value = "userId")int userId,
+            @RequestParam(value = "recipeId")int recipeId
+    ) {
+        ResDefault res = new ResDefault();
+        UserDataService userDataService = new UserDataService();
+        if(userDataService.addUserSearchLog(userId,recipeId))
+            res.data = "success";
+        else
+            res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/userSearchLog")
+    public ResponseEntity<ResDefault> userSearchLog(@RequestParam(value = "userId")int userId) {
+        ResDefault res = new ResDefault();
+        RecipeService recipeService = new RecipeService();
+        res.data = recipeService.getUserRecipeLog(userId);
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/addUserEvaluation")
+    public ResponseEntity<ResDefault> addUserEvaluation(
+            @RequestParam(value = "userId")int userId,
+            @RequestParam(value = "recipeId")int recipeId,
+            @RequestParam(value = "evaluation")int evaluation
+    ) {
+        ResDefault res = new ResDefault();
+        UserDataService userDataService = new UserDataService();
+        if(userDataService.addUserEvaluation(userId,recipeId,evaluation))
+            res.data = "success";
+        else
+            res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/getUserEvaluation")
+    public ResponseEntity<ResDefault> getUserEvaluation(
+            @RequestParam(value = "userId")int userId,
+            @RequestParam(value = "recipeId")int recipeId
+    ) {
+        ResDefault res = new ResDefault();
+        UserDataService userDataService = new UserDataService();
+        res.data=userDataService.getUserEvaluation(userId,recipeId);
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
+    @GetMapping("/getEvaluation")
+    public ResponseEntity<ResDefault> getEvaluation(
+            @RequestParam(value = "recipeId")int recipeId
+    ) {
+        ResDefault res = new ResDefault();
+        UserDataService userDataService = new UserDataService();
+        res.data=userDataService.getEvaluation(recipeId);
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
