@@ -84,12 +84,9 @@ public class RecipeService {
         return true;
     }
 
-    public ArrayList<RecipeModel> getUserRecipeLog(int userId){
-        String q = "select * from (" +
-                "select distinct b.*,(select avg(evaluation) as evaluation from userevaluation where recipeId = b.id limit 1) as evaluation, a.date " +
-                "from userrecipelog a inner join recipes b on a.recipeId = b.id " +
-                "where a.userId= ? order by a.date desc limit 100" +
-                ") c group by id limit 10";
+    public ArrayList<RecipeModel>getUserRecipeLog(int userId){
+        String q = "select r.id, r.name, r.img, r.difficulty, r.time, e.evaluation,r.description, l.date from userevaluation e right join userrecipelog l on e.userId = l.userId left join recipes r on r.id = l.recipeId where l.userId = ? group by name order by l.date desc limit 10";
+        
         ArrayList<String> val = new ArrayList<>();
         val.add(Integer.toString(userId));
         ArrayList<RecipeModel> result = new ArrayList<>();
