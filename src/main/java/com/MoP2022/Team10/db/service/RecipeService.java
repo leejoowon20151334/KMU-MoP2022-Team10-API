@@ -88,6 +88,19 @@ public class RecipeService {
         }
         return result;
     }
+    public ArrayList<RecipeModel>getMyEvaluation(int userId){
+        String q = "select * from UserFavorites f right join userevaluation e on e.userId = f.userId left join Recipes r on e.recipeId = r.id where f.userId = ?";
+        ArrayList<String> val = new ArrayList<>();
+        val.add(Integer.toString(userId));
+        ArrayList<RecipeModel> result = new ArrayList<>();
+        try {
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
+            result = parseDBRecipe(rs,false);
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return result;
+    }
 
     public ArrayList<RecipeTypeModel> getRecipeType(int recipeid){
         String q = "select b.* from RecipeCategoryMatch a inner join RecipeCategory b on a.categoryId=b.id " +
