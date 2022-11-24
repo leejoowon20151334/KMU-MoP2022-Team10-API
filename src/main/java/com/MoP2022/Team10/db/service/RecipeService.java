@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class RecipeService {
 
     public ArrayList<RecipeModel> getRecipeByName(String name){
-        String q = "select a.* from Recipes a where a.name like concat('%', ? ,'%')";
+        String q = "select a.*,(select avg(evaluation) as evaluation from userevaluation where recipeId = a.id limit 1) as evaluation from Recipes a where a.name like concat('%', ? ,'%')";
         ArrayList<String> val = new ArrayList<>();
         val.add(name);
         ArrayList<RecipeModel> result = new ArrayList<>();
@@ -26,7 +26,7 @@ public class RecipeService {
     }
 
     public ArrayList<RecipeModel> getRecipe(int recipeId){
-        String q = "select a.* from Recipes a where a.id = ? ";
+        String q = "select a.*,(select avg(evaluation) as evaluation from userevaluation where recipeId = a.id limit 1) as evaluation from Recipes a where a.id = ? ";
         ArrayList<String> val = new ArrayList<>();
         val.add(Integer.toString(recipeId));
         ArrayList<RecipeModel> result = new ArrayList<>();
@@ -41,7 +41,7 @@ public class RecipeService {
     }
 
     public ArrayList<RecipeModel> getUserRecipe(int userId){
-        String q = "select a.* from Recipes a inner join UserFavorites b on a.id=b.recipeId where b.userId = ? ";
+        String q = "select a.*,(select avg(evaluation) as evaluation from userevaluation where recipeId = a.id limit 1) as evaluation from Recipes a inner join UserFavorites b on a.id=b.recipeId where b.userId = ? ";
         ArrayList<String> val = new ArrayList<>();
         val.add(Integer.toString(userId));
         ArrayList<RecipeModel> result = new ArrayList<>();
@@ -56,13 +56,14 @@ public class RecipeService {
     }
 
     /*public boolean useRecipe(int userId, int recipeId){
+        String q = "select * from userIngredients ";
         ArrayList<RecipeModel> recipeList = getRecipe(recipeId);
 
     }*/
 
     public ArrayList<RecipeModel> getUserRecipeLog(int userId){
-        String q = "select distinct b.* from userrecipelog a inner join recipes b on a.recipeId = b.id\n" +
-                "where a.userId= ? ";
+        String q = "select distinct b.*,(select avg(evaluation) as evaluation from userevaluation where recipeId = b.id limit 1) as evaluation from userrecipelog a inner join recipes b on a.recipeId = b.id\n" +
+                "where a.userId= ? order by `date` desc limit 10";
         ArrayList<String> val = new ArrayList<>();
         val.add(Integer.toString(userId));
         ArrayList<RecipeModel> result = new ArrayList<>();
@@ -130,6 +131,8 @@ public class RecipeService {
             model.difficulty = Integer.parseInt(item.get("difficulty"));
             model.description = item.get("description");
             model.img = item.get("img");
+            if(item.containsKey("evaluation"))
+                model.evaluation = ((double)Math.round(Double.parseDouble(item.get("evaluation")) * 10)) / 10;
             if(getDetail) {
                 model.type = getRecipeType(model.id);
                 model.ingredients = ingredientService.getRecipeIngredient(model.id);

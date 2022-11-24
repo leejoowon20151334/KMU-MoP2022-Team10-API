@@ -151,6 +151,20 @@ public class Map extends OncePerRequestFilter {
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
+    @GetMapping("/isFavorite")
+    public ResponseEntity<ResDefault> isFavorite(
+            @RequestParam(value = "userId")int userId,
+            @RequestParam(value = "recipeId")int recipeId
+    ) {
+        ResDefault res = new ResDefault();
+        FavoriteService favoriteService = new FavoriteService();
+        if(favoriteService.isFavorite(userId,recipeId))
+            res.data = "success";
+        else
+            res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
     @GetMapping("/startPush")
     public ResponseEntity<ResDefault> startPush(
             @RequestParam(value = "userId")int userId,
@@ -249,6 +263,20 @@ public class Map extends OncePerRequestFilter {
         res.data = recipeService.getRecipe(recipeId);
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
+
+    /*@GetMapping("/useRecipe")
+    public ResponseEntity<ResDefault> useRecipe(
+            @RequestParam(value = "userId")int userId,
+            @RequestParam(value = "recipeId")int recipeId
+    ) {
+        ResDefault res = new ResDefault();
+        RecipeService recipeService = new RecipeService();
+        if(recipeService.useRecipe(userId,recipeId))
+            res.data = "success";
+        else
+            res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }*/
 
     @PostMapping(value = "/imageRecognition",produces="application/json; charset=utf-8")
     public ResponseEntity<ResDefault> imageRecognition(@RequestBody String imgStr) {
