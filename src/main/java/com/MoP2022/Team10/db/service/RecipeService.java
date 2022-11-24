@@ -170,7 +170,7 @@ public class RecipeService {
             model.difficulty = Integer.parseInt(item.get("difficulty"));
             model.description = item.get("description");
             model.img = item.get("img");
-            if(item.containsKey("evaluation"))
+            if(item.containsKey("evaluation") && item.get("evaluation")!=null)
                 model.evaluation = ((double)Math.round(Double.parseDouble(item.get("evaluation")) * 10)) / 10;
             if(getDetail) {
                 model.type = getRecipeType(model.id);
