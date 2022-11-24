@@ -61,7 +61,6 @@ public class Map extends OncePerRequestFilter {
         res.data = process.dbTest();
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
-
     @GetMapping("/signUp")
     public ResponseEntity<ResDefault> signUp(@RequestParam(value = "name")String name) {
         ResDefault res = new ResDefault();
@@ -129,6 +128,14 @@ public class Map extends OncePerRequestFilter {
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
+    @GetMapping("/getMyEvaluation")
+    public ResponseEntity<ResDefault> getMyEvaluation(@RequestParam(value = "userId")int userId) {
+        ResDefault res = new ResDefault();
+        RecipeService recipeService = new RecipeService();
+        res.data = recipeService.getMyEvaluation(userId);
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+    
     @GetMapping("/deleteFavorite")
     public ResponseEntity<ResDefault> deleteFavorite(
             @RequestParam(value = "userId")int userId,
