@@ -55,11 +55,34 @@ public class RecipeService {
         return result;
     }
 
-    /*public boolean useRecipe(int userId, int recipeId){
-        String q = "select * from userIngredients ";
-        ArrayList<RecipeModel> recipeList = getRecipe(recipeId);
-
-    }*/
+    public boolean useRecipe(int userId, int recipeId){
+        String q = "select a.ingredientId,(a.count - b.count) as 'val' from userIngredients a " +
+                "inner join (select ingredientId,count from recipeIngredientMatch where recipeId = ? ) b " +
+                "on a.ingredientId = b.ingredientId " +
+                "where userId = ? and a.ingredientId in (select ingredientId from recipeIngredientMatch where recipeId = ? );";
+        ArrayList<String> val = new ArrayList<>();
+        val.add(Integer.toString(recipeId));
+        val.add(Integer.toString(userId));
+        val.add(Integer.toString(recipeId));
+        try {
+            ArrayList<HashMap<String,String>> rs = DBExec.select(q,val);
+            for(HashMap<String,String> row : rs){
+                double remain = Double.parseDouble(row.get("val"));
+                val = new ArrayList<>();
+                if(remain>0) {
+                    q = "update userIngredients set count = ? where userId = ? and ingredientId = ? ";
+                    val.add(Double.toString(remain));
+                }else
+                    q = "delete from userIngredients where userId = ? and ingredientId = ? ";
+                val.add(Integer.toString(userId));
+                val.add(row.get("ingredientId"));
+                DBExec.update(q,val);
+            }
+        }catch (Exception e){
+            System.out.println(e.toString());
+        }
+        return true;
+    }
 
     public ArrayList<RecipeModel> getUserRecipeLog(int userId){
         String q = "select distinct b.*,(select avg(evaluation) as evaluation from userevaluation where recipeId = b.id limit 1) as evaluation from userrecipelog a inner join recipes b on a.recipeId = b.id\n" +

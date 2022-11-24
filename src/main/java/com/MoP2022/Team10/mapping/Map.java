@@ -264,7 +264,7 @@ public class Map extends OncePerRequestFilter {
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
-    /*@GetMapping("/useRecipe")
+    @GetMapping("/useRecipe")
     public ResponseEntity<ResDefault> useRecipe(
             @RequestParam(value = "userId")int userId,
             @RequestParam(value = "recipeId")int recipeId
@@ -276,7 +276,7 @@ public class Map extends OncePerRequestFilter {
         else
             res.data = "fail";
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
-    }*/
+    }
 
     @PostMapping(value = "/imageRecognition",produces="application/json; charset=utf-8")
     public ResponseEntity<ResDefault> imageRecognition(@RequestBody String imgStr) {
