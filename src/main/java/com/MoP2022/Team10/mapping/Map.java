@@ -285,6 +285,16 @@ public class Map extends OncePerRequestFilter {
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
+    @PostMapping(value = "/setUsername") 
+    public ResponseEntity<ResDefault> setUsername(
+        @RequestParam(value = "userId")int userId,
+        @RequestParam(value = "name")String name) {
+        ResDefault res = new ResDefault();
+        UserDataService userDataService = new UserDataService();
+        userDataService.changeName(userId, name);
+
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
     @PostMapping(value = "/imageRecognition",produces="application/json; charset=utf-8")
     public ResponseEntity<ResDefault> imageRecognition(@RequestBody String imgStr) {
         ResDefault res = new ResDefault();

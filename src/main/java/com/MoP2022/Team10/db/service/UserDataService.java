@@ -16,6 +16,14 @@ public class UserDataService {
         return DBExec.update(q,val);
     }
 
+    public boolean changeName(int userId, String name){
+        String q = "UPDATE users SET name = ? WHERE (`id` = ?)";
+        ArrayList<String> val = new ArrayList<>();
+        val.add(name);
+        val.add(Integer.toString(userId));
+        return DBExec.update(q,val);
+    }
+
     public int getUserIdByName(String userName){
         int result = 0;
         String q = "select id from Users where `name` = ? limit 1";
