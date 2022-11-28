@@ -101,7 +101,7 @@ public class Map extends OncePerRequestFilter {
     public ResponseEntity<ResDefault> addUserIngredient(
             @RequestParam(value = "userId")int userId,
             @RequestParam(value = "ingredientId")int ingredientId,
-            @RequestParam(value = "count")int count,
+            @RequestParam(value = "count")double count,
             @RequestParam(value = "expire")String expire
     ) {
         ResDefault res = new ResDefault();

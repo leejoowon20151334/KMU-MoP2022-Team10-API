@@ -91,7 +91,7 @@ public class IngredientService {
         return id;
     }
 
-    public boolean addUserIngredient(int userId, int ingredientId, int count, LocalDate expire){
+    public boolean addUserIngredient(int userId, int ingredientId, double count, LocalDate expire){
         int id = userIngredientExists(userId,ingredientId,expire);
         if(id!=0)
             return plusIngredient(id,count);
@@ -102,15 +102,15 @@ public class IngredientService {
         ArrayList<String> val = new ArrayList<>();
         val.add(Integer.toString(userId));
         val.add(Integer.toString(ingredientId));
-        val.add(Integer.toString(count));
+        val.add(Double.toString(count));
         val.add(expire.toString());
         return DBExec.update(q,val);
     }
 
-    public boolean plusIngredient(int id,int count){
+    public boolean plusIngredient(int id,double count){
         String q = "update UserIngredients set `count`=(`count` + ?) where id = ?";
         ArrayList<String> val = new ArrayList<>();
-        val.add(Integer.toString(count));
+        val.add(Double.toString(count));
         val.add(Integer.toString(id));
         return DBExec.update(q,val);
     }
