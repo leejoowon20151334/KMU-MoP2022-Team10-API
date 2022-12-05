@@ -16,6 +16,13 @@ public class UserDataService {
         return DBExec.update(q,val);
     }
 
+    public boolean deleteUser(int userId){
+        String q = "delete from users where id= ? ";
+        ArrayList<String> val = new ArrayList<>();
+        val.add(Integer.toString(userId));
+        return DBExec.update(q,val);
+    }
+
     public boolean changeName(int userId, String name){
         String q = "UPDATE users SET name = ? WHERE (`id` = ?)";
         ArrayList<String> val = new ArrayList<>();

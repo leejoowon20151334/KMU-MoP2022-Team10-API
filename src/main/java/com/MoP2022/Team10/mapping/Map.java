@@ -72,6 +72,17 @@ public class Map extends OncePerRequestFilter {
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
 
+    @GetMapping("/deleteUser")
+    public ResponseEntity<ResDefault> deleteUser(@RequestParam(value = "userId")int userId) {
+        ResDefault res = new ResDefault();
+        UserDataService userDataService = new UserDataService();
+        if(userDataService.deleteUser(userId))
+            res.data = "success";
+        else
+            res.data = "fail";
+        return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
+    }
+
     @GetMapping("/getUserId")
     public ResponseEntity<ResDefault> getUserId(@RequestParam(value = "name")String name) {
         ResDefault res = new ResDefault();
@@ -79,7 +90,6 @@ public class Map extends OncePerRequestFilter {
         res.data = userDataService.getUserIdByName(name);
         return new ResponseEntity<ResDefault>(res, res.headers, res.statusCode);
     }
-
 
     @GetMapping("/getIngredient")
     public ResponseEntity<ResDefault> getIngredient(@RequestParam(value = "name")String name) {
